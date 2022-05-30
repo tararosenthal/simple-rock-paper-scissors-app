@@ -11,8 +11,8 @@ export function getComputerChoice() {
 }
 
 export function getResult(playerChoice, computerChoice) {
-  playerChoice = String(playerChoice).toLowerCase();
-  computerChoice = String(computerChoice).toLowerCase();
+  playerChoice = String(playerChoice).toLowerCase().trim();
+  computerChoice = String(computerChoice).toLowerCase().trim();
 
   if(playerChoice === 'rock' || playerChoice === 'paper'
      || playerChoice === 'scissors') {

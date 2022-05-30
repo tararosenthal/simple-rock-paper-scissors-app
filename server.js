@@ -1,13 +1,13 @@
 import { createServer } from 'http';
 import { readFile } from 'fs';
-import { parse } from 'url';
-import { parse as _parse } from 'querystring';
+import { URL } from 'node:url';
 import figlet from 'figlet';
-import { getComputerChoice, getResult } from './utils.js';
+import { getComputerChoice, getResult } from './util.js';
 
 const server = createServer((req, res) => {
-  const page = parse(req.url).pathname;
-  const params = _parse(parse(req.url).query);
+  const myURL = new URL(req.url, `http://${req.headers.host}`);
+  const page = myURL.pathname;
+  const params = new URLSearchParams(myURL.searchParams);
   console.log(page);
 
   switch(page) {
@@ -19,13 +19,13 @@ const server = createServer((req, res) => {
       });
       break;
     case '/api':
-      if('rockpaperscissors' in params) {
+      if(params.has('rockpaperscissors')) {
         res.writeHead(200, {'Content-Type': 'application/json'});
         let computerChoice = getComputerChoice();
         const objToJson = {
-          playerChoice: params['rockpaperscissors'],
+          playerChoice: params.get('rockpaperscissors'),
           computerChoice: computerChoice,
-          result: getResult(params['rockpaperscissors'], computerChoice)
+          result: getResult(params.get('rockpaperscissors'), computerChoice)
         }
         res.end(JSON.stringify(objToJson));
       }
